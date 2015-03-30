@@ -1,0 +1,8 @@
+{
+    "name": "wieni/laravel-queue",
+    "autoload": {
+        "psr-4": {
+            "Wieni\\Queue\\": "src/"
+        }
+    }
+}
