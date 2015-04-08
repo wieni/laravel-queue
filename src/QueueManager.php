@@ -4,20 +4,20 @@ use DB;
 
 class QueueManager
 {
-    public function addFirst($queueId, $entity)
+    public function addFirst($queueId, $entityId, $entityType)
     {
         $firstItem = DB::table('queue')->where('queue_id', $queueId)->orderBy('weight')->first();
         $weight = $firstItem ? (int) $firstItem->weight - 1 : 0;
 
-        $this->createQueueItem($queueId, $entity, $weight);
+        $this->createQueueItem($queueId, $entityId, $entityType, $weight);
     }
 
-    public function addLast($queueId, $entity)
+    public function addLast($queueId, $entityId, $entityType)
     {
         $lastItem = DB::table('queue')->where('queue_id', $queueId)->orderBy('weight', 'desc')->first();
         $weight = $lastItem ? (int) $lastItem->weight + 1 : 0;
 
-        $this->createQueueItem($queueId, $entity, $weight);
+        $this->createQueueItem($queueId, $entityId, $entityType, $weight);
     }
 
     public function update($queueId, array $queue)
@@ -47,13 +47,13 @@ class QueueManager
         return !is_null($item);
     }
 
-    protected function createQueueItem($queueId, $entity, $weight)
+    protected function createQueueItem($queueId, $entityId, $entityType, $weight)
     {
         DB::table('queue')
             ->insert([
                 'queue_id' => $queueId,
-                'entity_id' => $entity->id,
-                'entity_type' => get_class($entity),
+                'entity_id' => $entityId,
+                'entity_type' => $entityType,
                 'weight' => $weight
             ]);
     }
