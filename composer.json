@@ -4,5 +4,11 @@
         "psr-4": {
             "Wieni\\Queue\\": "src/"
         }
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/auth": "5.0.*",
+        "illuminate/database": "5.0.*",
+        "illuminate/support": "5.0.*"
     }
 }
