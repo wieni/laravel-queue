@@ -23,13 +23,17 @@ class QueueManager
     public function update($queueId, array $queue)
     {
         foreach ($queue as $index => $queueItem) {
-            $this->updateQueueItem($queueId, $queueItem['entity_id'], $queueItem['entity_type'], $index);
+            $rowsAffected = $this->updateQueueItem($queueId, $queueItem['entity_id'], $queueItem['entity_type'], $index);
+
+            if ($rowsAffected === 0) {
+                $this->createQueueItem($queueId, $queueItem['entity_id'], $queueItem['entity_type'], $index);
+            }
         }
     }
 
     public function removeQueueItem($queueId, $entityId, $entityType)
     {
-        DB::table('queue')
+        return DB::table('queue')
             ->where('queue_id', $queueId)
             ->where('entity_id', $entityId)
             ->where('entity_type', $entityType)
@@ -60,7 +64,7 @@ class QueueManager
 
     protected function updateQueueItem($queueId, $entityId, $entityType, $weight)
     {
-        DB::table('queue')
+        return DB::table('queue')
             ->where('queue_id', $queueId)
             ->where('entity_id', $entityId)
             ->where('entity_type', $entityType)
